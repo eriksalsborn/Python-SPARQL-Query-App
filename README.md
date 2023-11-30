@@ -1,4 +1,4 @@
-# Python-SPARQL-Query-App
+# SPARQL-Movie-Explorer
 
 Simple straightforward Python script designed to query SPARQL endpoints and retrieve the results.
 
@@ -10,7 +10,7 @@ The script prompts the user to input a director's or a actor's/actresse's name. 
 
 1. **Clone the repository:**
  ```bash
- git clone git@github.com:eriksalsborn/Python-SPARQL-Query-App.git
+ git clone git@github.com:eriksalsborn/SPARQL-Movie-Explorer.git
  ```
 
 2. **Navigate to the project directory**
