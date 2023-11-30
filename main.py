@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import configparser
 import pandas as pd
-from query import get_movies_by_director
+from query import get_movies_by_director, get_movies_by_actor
 
 def get_sparql_endpoint():
     config = configparser.ConfigParser()
@@ -25,12 +25,29 @@ def display_results(results, director_name):
     else:
         print(f"No movies found for director: {director_name}")
 
+def perform_movie_search(sparql_endpoint):
+    while True:
+        actor_or_director = input("Do you want to search movies for directors or actors? (d/a): ").lower()
+
+        if actor_or_director not in ['d', 'a']:
+            print("Invalid input. Please enter 'd' for directors or 'a' for actors.")
+            continue
+
+        name_type = "director's" if actor_or_director == 'd' else "actor's/actress'"
+        name_input = input(f"Enter {name_type} name: ")
+
+        query_function = get_movies_by_director if actor_or_director == 'd' else get_movies_by_actor
+
+        results = query_dbpedia(query_function(name_input), sparql_endpoint)
+        display_results(results, name_input)
+
+        another_search = input("Do you want to perform another search? (y/n): ").lower()
+        if another_search != 'y':
+            break
+
 def main():
     sparql_endpoint = get_sparql_endpoint()
-    director_name = input("Enter director's name: ")
-    query = get_movies_by_director(director_name)
-    results = query_dbpedia(query, sparql_endpoint)
-    display_results(results, director_name)
+    perform_movie_search(sparql_endpoint)
 
 if __name__ == "__main__":
     main()
