@@ -33,7 +33,7 @@ This will install the required Python packages for the project.
 
 1. **Run the script:**
 ```bash
-   python sparql_query_app.py
+   python main.py
 ```
 2. **Enter the director's name whose movies you want to find**
 
