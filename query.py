@@ -5,8 +5,8 @@ def get_movies_by_director(director_name):
         PREFIX dbo: <http://dbpedia.org/ontology/>
         
         SELECT ?filmName 
-        (GROUP_CONCAT(?allActorsName; separator=",") AS ?allActorsName)
-        ?distributorName
+        (GROUP_CONCAT(DISTINCT ?allActorsName; separator=",") AS ?allActorsName)
+        (GROUP_CONCAT(DISTINCT ?distributorName; separator=",") AS ?distributorName)
         ?gross 
         ?durationInMinutes
         WHERE {{
@@ -25,6 +25,6 @@ def get_movies_by_director(director_name):
     
             FILTER (?gross > 4E7)
         }}
-        GROUP BY ?filmName ?distributorName ?gross ?durationInMinutes
+        GROUP BY ?filmName ?gross ?durationInMinutes
         ORDER BY DESC(?gross)
     """
