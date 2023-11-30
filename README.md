@@ -4,6 +4,8 @@ Simple straightforward Python script designed to query SPARQL endpoints and retr
 
 The script prompts the user to input a director's name. After entering the director's name, the script queries the SPARQL endpoint to display a list of movies directed by the specified individual.
 
+![demo](demo.gif)
+
 ## Installation
 
 1. **Clone the repository:**
