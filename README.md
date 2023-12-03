@@ -15,7 +15,7 @@ The script prompts the user to input a director's or a actor's/actresse's name. 
 
 2. **Navigate to the project directory**
 ```bash
-   cd Python-SPARQL-Query-App
+   cd SPARQL-Movie-Explorer
 ```
 3. **Install dependencies**
 ```bash
