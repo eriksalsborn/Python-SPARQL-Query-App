@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import configparser
 import pandas as pd
-from query import get_movies_by_director, get_movies_by_actor
+from query import get_movies_by_director, get_movies_by_actor, get_info_about_movie
 
 def get_sparql_endpoint():
     config = configparser.ConfigParser()
@@ -16,27 +16,27 @@ def query_dbpedia(query, sparql_endpoint):
     results = sparql_wrapper.query().convert()
     return results['results']['bindings']
 
-def display_results(results, director_name):
+def display_results(results, name_input):
     if results:
         results_df = pd.json_normalize(results)
         display_df = results_df[['filmName.value', 'allActorsName.value', 'gross.value', 'distributorName.value', 'durationInMinutes.value']]
         display_df.columns = ['Film', 'Actors', 'Gross', 'Distributor', 'Duration (minutes)']
         print(display_df)
     else:
-        print(f"No movies found for director: {director_name}")
+        print(f"No movies found for: {name_input}")
 
 def perform_movie_search(sparql_endpoint):
     while True:
-        actor_or_director = input("Do you want to search movies for directors or actors? (d/a): ").lower()
+        actor_or_director_or_movie = input("Do you want to search movies for directors or actors? (d/a/m): ").lower()
 
-        if actor_or_director not in ['d', 'a']:
-            print("Invalid input. Please enter 'd' for directors or 'a' for actors.")
+        if actor_or_director_or_movie not in ['d', 'a', 'm']:
+            print("Invalid input. Please enter 'd' for directors, 'a' for actors or 'm' for movies")
             continue
 
-        name_type = "director's" if actor_or_director == 'd' else "actor's/actress'"
+        name_type = "director's" if actor_or_director_or_movie == 'd' else "actor's/actress'" if actor_or_director_or_movie == 'a' else "movie's"
         name_input = input(f"Enter {name_type} name: ")
 
-        query_function = get_movies_by_director if actor_or_director == 'd' else get_movies_by_actor
+        query_function = get_movies_by_director if actor_or_director_or_movie == 'd' else get_movies_by_actor if actor_or_director_or_movie == 'a' else get_info_about_movie
 
         results = query_dbpedia(query_function(name_input), sparql_endpoint)
         display_results(results, name_input)
