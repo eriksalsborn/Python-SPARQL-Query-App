@@ -51,7 +51,8 @@ def get_movies_by_actor(actor_name):
                 dbo:distributor ?distributor ;
                 dbo:runtime ?runtime ;
                 dbp:name ?filmName ;
-                dbp:starring ?allActors .
+                dbp:starring ?allActors ;
+                dbo:director ?director .
     
             ?distributor dbp:name ?distributorName .
             ?allActors dbp:name ?allActorsName .
@@ -82,7 +83,8 @@ def get_info_about_movie(movie_name):
                 dbo:distributor ?distributor ;
                 dbo:runtime ?runtime ;
                 dbp:name ?filmName ;
-                dbp:starring ?allActors .
+                dbp:starring ?allActors ;
+                dbo:director ?director .
 
             ?distributor dbp:name ?distributorName .
             ?allActors dbp:name ?allActorsName .

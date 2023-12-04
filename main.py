@@ -27,7 +27,7 @@ def display_results(results, name_input):
 
 def perform_movie_search(sparql_endpoint):
     while True:
-        actor_or_director_or_movie = input("Do you want to search movies for directors or actors? (d/a/m): ").lower()
+        actor_or_director_or_movie = input("Do you want to search movies by directors, actors, name of movies? (d/a/m): ").lower()
 
         if actor_or_director_or_movie not in ['d', 'a', 'm']:
             print("Invalid input. Please enter 'd' for directors, 'a' for actors or 'm' for movies")
