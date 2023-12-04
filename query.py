@@ -1,3 +1,5 @@
+from util import format_input
+
 def get_movies_by_director(director_name):
     return f"""
         PREFIX dbp: <http://dbpedia.org/property/>
@@ -5,29 +7,32 @@ def get_movies_by_director(director_name):
         PREFIX dbo: <http://dbpedia.org/ontology/>
         
         SELECT ?filmName, 
+        (GROUP_CONCAT(DISTINCT ?directorName; separator=",") AS ?directorName),
         (GROUP_CONCAT(DISTINCT ?allActorsName; separator=",") AS ?allActorsName),
         (GROUP_CONCAT(DISTINCT ?distributorName; separator=",") AS ?distributorName),
         ?gross,
         ?durationInMinutes
         WHERE {{
-            ?film dbp:director dbr:{director_name.replace(" ", "_")} ;
-                dbo:gross ?grossUri ;
+            ?film dbo:gross ?grossUri ;
                 dbo:distributor ?distributor ;
                 dbo:runtime ?runtime ;
                 dbp:name ?filmName ;
-                dbo:starring ?allActors .
+                dbo:starring ?allActors ;
+                dbo:director ?director .
     
             ?distributor dbp:name ?distributorName .
             ?allActors dbp:name ?allActorsName .
+            ?director dbp:name ?directorName .
     
             BIND(xsd:decimal(?runtime) / 60 AS ?durationInMinutes)
             BIND(xsd:decimal(?grossUri) AS ?gross)
-    
-            FILTER (?gross > 1E7)
+
+            FILTER(regex(?director, "{format_input(director_name)}", "i"))
         }}
         GROUP BY ?filmName ?gross ?durationInMinutes
         ORDER BY DESC(?gross)
     """
+
 
 def get_movies_by_actor(actor_name):
     return f"""
@@ -36,13 +41,13 @@ def get_movies_by_actor(actor_name):
         PREFIX dbo: <http://dbpedia.org/ontology/>
         
         SELECT ?filmName, 
+        (GROUP_CONCAT(DISTINCT ?directorName; separator=",") AS ?directorName),
         (GROUP_CONCAT(DISTINCT ?allActorsName; separator=",") AS ?allActorsName),
         (GROUP_CONCAT(DISTINCT ?distributorName; separator=",") AS ?distributorName),
         ?gross,
         ?durationInMinutes
         WHERE {{
-            ?film dbp:starring dbr:{actor_name.replace(" ", "_")} ;
-                dbo:gross ?grossUri ;
+            ?film dbo:gross ?grossUri ;
                 dbo:distributor ?distributor ;
                 dbo:runtime ?runtime ;
                 dbp:name ?filmName ;
@@ -50,11 +55,12 @@ def get_movies_by_actor(actor_name):
     
             ?distributor dbp:name ?distributorName .
             ?allActors dbp:name ?allActorsName .
+            ?director dbp:name ?directorName .
     
             BIND(xsd:decimal(?runtime) / 60 AS ?durationInMinutes)
             BIND(xsd:decimal(?grossUri) AS ?gross)
-    
-            FILTER (?gross > 1E7)
+
+            FILTER(regex(?allActors, "{format_input(actor_name)}", "i"))
         }}
         GROUP BY ?filmName ?gross ?durationInMinutes
         ORDER BY DESC(?gross)
@@ -66,6 +72,7 @@ def get_info_about_movie(movie_name):
         PREFIX dbo: <http://dbpedia.org/ontology/>
 
         SELECT ?filmName, 
+            (GROUP_CONCAT(DISTINCT ?directorName; separator=",") AS ?directorName),
             (GROUP_CONCAT(DISTINCT ?allActorsName; separator=",") AS ?allActorsName),
             (GROUP_CONCAT(DISTINCT ?distributorName; separator=",") AS ?distributorName),
             ?gross,
@@ -79,6 +86,7 @@ def get_info_about_movie(movie_name):
 
             ?distributor dbp:name ?distributorName .
             ?allActors dbp:name ?allActorsName .
+            ?director dbp:name ?directorName .
 
             BIND(xsd:decimal(?runtime) / 60 AS ?durationInMinutes)
             BIND(xsd:decimal(?grossUri) AS ?gross)
