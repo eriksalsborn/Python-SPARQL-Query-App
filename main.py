@@ -19,8 +19,8 @@ def query_dbpedia(query, sparql_endpoint):
 def display_results(results, name_input):
     if results:
         results_df = pd.json_normalize(results)
-        display_df = results_df[['filmName.value', 'directorName.value','allActorsName.value', 'gross.value', 'distributorName.value', 'durationInMinutes.value']]
-        display_df.columns = ['Film', 'Director' ,'Actors', 'Gross', 'Distributor', 'Duration (minutes)']
+        display_df = results_df[['filmName.value', 'directorName.value', 'allActorsName.value', 'durationInMinutes.value', 'gross.value', 'distributorName.value']]
+        display_df.columns = ['Film', 'Director', 'Actors', 'Duration (min)', 'Gross (USD)', 'Distributor']
         print(display_df)
     else:
         print(f"No movies found for: {name_input}")
