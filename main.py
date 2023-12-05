@@ -12,6 +12,8 @@ def query_dbpedia(query, sparql_endpoint):
     sparql_wrapper = SPARQLWrapper(sparql_endpoint)
     sparql_wrapper.setQuery(query)
     sparql_wrapper.setReturnFormat(JSON)
+
+    print('\nLoading... \n')
     
     results = sparql_wrapper.query().convert()
     return results['results']['bindings']
@@ -41,7 +43,7 @@ def perform_movie_search(sparql_endpoint):
         results = query_dbpedia(query_function(name_input), sparql_endpoint)
         display_results(results, name_input)
 
-        another_search = input("Do you want to perform another search? (y/n): ").lower()
+        another_search = input("\nDo you want to perform another search? (y/n): ").lower()
         if another_search != 'y':
             break
 
